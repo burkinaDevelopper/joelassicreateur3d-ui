@@ -1,11 +1,11 @@
 import TheHeader from '@/Components/TheHeader';
-import { ThemeProvider as NextThemesProvider } from "next-themes"
+
 import { ThemeProvider } from './ThemeProvider';
 import Banner from '@/Components/Banner';
 import Footer from '@/Components/Footer';
 import axios from 'axios';
-import React, { useEffect, useState } from "react";
-import useBaseUrl from '@/hooks/useBaseUrl';
+import React, { useEffect, useMemo, useState } from "react";
+
 
 interface Social {
     youtube: string;
@@ -15,34 +15,49 @@ interface Social {
     facebook: string;
     number: string;
 }
-// const socials:Social={
-//     youtube:'https://www.youtube.com/c/JoelAssiCréateur3D',
-//     tiktok:'https://www.tiktok.com/@joelassicreateur.3d',
-//     email:'ericassi159@gmail.com',
-//     instagram:'https://www.instagram.com/joel_assi_createur_3d',
-//     facebook:'https://web.facebook.com/joelassicreateur3d',
-//     number:'+212 609 624765',
-// }
-interface Pros{
-    id:string;
-    title:string;
-    slug: string;
-  }
+const socials:Social={
+  youtube: import.meta.env.VITE_SOCIAL_YOUTUBE,
+  tiktok: import.meta.env.VITE_SOCIAL_TIKTOK,
+  email: import.meta.env.VITE_SOCIAL_EMAIL,
+  instagram: import.meta.env.VITE_SOCIAL_INSTAGRAM,
+  facebook: import.meta.env.VITE_SOCIAL_FACEBOOK,
+  number: import.meta.env.VITE_SOCIAL_NUMBER,
+}
+interface Cours{
+  id:string;
+  title:string;
+  slug:string;
+}
 
 const PublicLayout = ({ children}: { children: React.ReactNode }) => {
-    const [datas, setDatas] = useState<Social>();
-    const baseUrl=useBaseUrl();
-    
-   
-    useEffect(()=>{
-        axios.get(baseUrl)
-        .then(function (response) {
-          setDatas(response.data.socials);
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
-    },[]);
+  const [data, setData] = useState<Cours[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const baseUrl = import.meta.env.VITE_API_URL; 
+
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+          const response = await axios.get(`${baseUrl}/api/global-data`, {
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            }
+          });
+          console.log('Fetching from:', response.data.coures); // Debug log
+            if (response.data.coures) {
+                setData(response.data.coures);
+            } else {
+                console.error('Invalid response format:', response.data);
+            }
+        } catch (err) {
+            console.error('Fetch error:', err);
+            setError(err instanceof Error ? err.message : 'Une erreur est survenue');
+        }
+    };
+
+    fetchData();
+}, [baseUrl]);
+const memoizedCourse = useMemo(() => data, [data]);
     
     return (
         <div>
@@ -52,15 +67,15 @@ const PublicLayout = ({ children}: { children: React.ReactNode }) => {
              enableSystem
              disableTransitionOnChange
             >   
-             {/* <Banner /> */}
-             {datas && <TheHeader socials={datas}/>}
+              { socials && <TheHeader memoizedCourse={memoizedCourse} socials={socials}/>}
                 {children}
-                <div className='border-t-2 py-5 mt-5'>
-                {datas && <Footer socials={datas}/>}
-                </div>
+              <div className='border-t-2 py-5 mt-5'>
+                <Footer socials={socials}/>
+              </div>
             </ThemeProvider>
         </div>
     );
 };
 
 export default PublicLayout;
+

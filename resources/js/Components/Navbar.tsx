@@ -11,33 +11,20 @@ import {
   import {ChevronDown } from 'lucide-react';
 import { Link, usePage } from "@inertiajs/react"
 import React, { useEffect, useState } from "react";
-import axios from 'axios';
-import useBaseUrl from "@/hooks/useBaseUrl";
 
-interface Pros{
+
+
+interface Cours{
   id:string;
   title:string;
-  slug: string;
+  slug:string;
 }
-interface Cours{
-  cours:Pros[];
+interface PropsSocialType{
+  memoizedCourse: Cours[],
 }
   
-const Navbar = () => {
+const Navbar:React.FC<PropsSocialType> = ({memoizedCourse}) => {
 
-  const [datas, setDatas] = useState<Pros[] | null>([]);
-  const baseUrl=useBaseUrl();
- 
-  useEffect(()=>{
-    axios.get(baseUrl)
-    .then(function (response) {
-      // handle success
-      setDatas(response.data.coures);
-    })
-    .catch(function (error) {
-      console.log(error);
-    })
-  },[]);
     const {url,props}=usePage<any>();
     
     return (
@@ -61,7 +48,7 @@ const Navbar = () => {
           <MenubarTrigger>COURS <ChevronDown /></MenubarTrigger>
           <MenubarContent>
             <MenubarRadioGroup value={props?.cours?.slug}>
-              {datas && datas.map((cour,index)=>(
+              {memoizedCourse && memoizedCourse.map((cour,index)=>(
               <MenubarRadioItem key={index} value={cour.slug== props?.cours?.slug ?cour.slug:''}>
                 <Link className=" uppercase" href={`/cours/${cour.slug}`}>{cour.title}</Link>
               </MenubarRadioItem>

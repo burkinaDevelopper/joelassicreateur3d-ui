@@ -26,12 +26,13 @@ interface PropsDatas{
     bg:Items;
     video:Items;
     mentor:Items;
+    banner:Items;
     demoLesson:Items[];
     certification:Items;
     studentImg:Items[];
 }
 
-const Index:React.FC<PropsDatas> = ({bg,video,mentor,demoLesson,certification,studentImg}) => {
+const Index:React.FC<PropsDatas> = ({bg,video,banner,mentor,demoLesson,certification,studentImg}) => {
   
   
     return (
@@ -45,7 +46,7 @@ const Index:React.FC<PropsDatas> = ({bg,video,mentor,demoLesson,certification,st
                 <Header bg={bg} video={video} />
               </div>
               <div className='w-full  m-auto'>
-                <Banner />
+                <Banner banner={banner}/> 
               </div>
               <div className='py-2 w-full m-auto'>
                 <Learn />

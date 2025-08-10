@@ -1,9 +1,15 @@
 import { Link } from '@inertiajs/react';
 import React from 'react';
 
-const Banner = () => {
-    const bool=false;
-    const backgroundUrl = `url(${bool? "": "/assets/wp/bg-wood-2.jpg"})`;
+interface Items{
+    url:string;
+}
+interface PropsBanner{
+   banner:Items
+}
+
+const Banner:React.FC<PropsBanner> = ({banner}) => {
+    const backgroundUrl = `url(${banner? banner.url: "/assets/wp/bg-wood-2.jpg"})`;
     const myStyle = {
         backgroundImage: backgroundUrl,
         backgroundSize: "cover",

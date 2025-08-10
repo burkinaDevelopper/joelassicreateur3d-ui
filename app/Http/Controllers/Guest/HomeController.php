@@ -10,9 +10,12 @@ use App\Models\{
     DemoLessonHome,
     CertificationHome,
     StudentHome,
+    BannerHome,
 };
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cookie;
+
 
 
 class HomeController extends Controller
@@ -24,10 +27,13 @@ class HomeController extends Controller
     {
         $bg=ImageHome::inRandomOrder()->limit(1)->first();
         $video=VideoHome::inRandomOrder()->limit(1)->first();
+        $banner=BannerHome::inRandomOrder()->limit(1)->first();
         $mentor=MentorHome::inRandomOrder()->limit(1)->first();
         $demoLesson=DemoLessonHome::inRandomOrder()->limit(3)->get();
         $certification=CertificationHome::inRandomOrder()->limit(1)->first();
         $studentImg=StudentHome::inRandomOrder()->limit(8)->get();
+       
+    
         $data=[
             'bg'=>$bg,
             'video'=>$video,
@@ -35,6 +41,7 @@ class HomeController extends Controller
             'demoLesson'=>$demoLesson,
             'certification'=>$certification,
             'studentImg'=>$studentImg,
+            'banner'=>$banner,
         ]; 
         return Inertia::render('Guest/home/Index',$data);
     }

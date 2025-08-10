@@ -73,6 +73,12 @@ export function AppSidebar() {
                           <span className="ml-2">Video d'en-tête</span>
                         </Link>
                     </SidebarMenuButton>  
+                    <SidebarMenuButton className={url === '/homebanner' ? 'bg-slate-800 ' : ''} asChild>
+                        <Link href="homebanner" className="flex items-center">
+                          <Images />
+                          <span className="ml-2">Banner image</span>
+                        </Link>
+                    </SidebarMenuButton>  
                     <SidebarMenuButton className={url === '/homementor' ? 'bg-slate-800 ' : ''} asChild>
                         <Link href="homementor" className="flex items-center">
                           <Images />

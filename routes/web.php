@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\{
     ChapterController,
     MarketingController,
     VideoHomeController,
+    BannerHomeController,
     
 };
 use App\Http\Controllers\Guest\{
@@ -26,9 +27,18 @@ use App\Http\Controllers\Guest\{
 use App\Http\Controllers\{
     NewspaperController,
 };
+use App\Http\Controllers\Api\CoursController;
+
+
+Route::middleware(['nocors'])->prefix('api')->group(function () {
+    Route::get('/global-data', CoursController::class);
+});
 
 Route::middleware(['auth', 'role'])->group(function () {
     Route::resource('/homeimage', ImageHomeController::class)->only([
+        'index','destroy','store'
+    ]);
+    Route::resource('/homebanner', BannerHomeController::class)->only([
         'index','destroy','store'
     ]);
     Route::resource('/homementor', MentorHomeController::class)->only([

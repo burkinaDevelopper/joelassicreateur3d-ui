@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { Facebook,Instagram,Youtube,AtSign,MailPlus,AlignJustify,X,ChevronDown,Phone } from 'lucide-react';
 import { Head } from '@inertiajs/react'
+import { log } from 'console';
 
 interface PropsSocial{
     number:string,
@@ -19,7 +20,8 @@ interface PropsSocial{
   }
 const Index = () => {
     const [socials, setSocials] = useState<PropsSocial | undefined>();
-  const baseUrl='http://127.0.0.1:8000/api/global-data';
+  const baseUrl=import.meta.env.VITE_API_URL;
+ 
  
   useEffect(()=>{
     axios.get(baseUrl)
@@ -35,8 +37,8 @@ const Index = () => {
             <Head title="Contactez-nous pour vos formations en Rendu 3D | Joel Assi">
                     <meta name="description" content="Besoin d'aide ou de renseignements sur nos formations en rendu 3D avec Enscape, V-ray ou Lumion sur SketchUp ? Contactez Joel Assi, expert en 3D. Publié le 20/01/2025." />
             </Head>
-            <main className='mt-12 md:mt-32'>
-                <div className='text-center py-10'>
+            <main className='mt-12 md:mt-32 '>
+                <div className='text-center py-10   '>
                  <HeroHighlightDemoContact />
                 </div> 
                  <p className='text-center my-7 text-xl'>Nous sommes toujours là pour vous écoutez pour vous accompagner et répondre à tous vos besoins.</p>
@@ -47,22 +49,26 @@ const Index = () => {
                              <div className='mb-2'>
                                 <h3 className='font-semibold mx-2 mb-3'>SOCIALS</h3>
                                 <ul className='flex md:flex-row'>
-                                    <li className='mx-0 flex '><a href={socials?.facebook}><Facebook /></a></li>
-                                    <li className='mx-2 flex'><a href={socials?.instagram}><Instagram /></a></li>
-                                    <li className='mx-2 flex'><a href={socials?.youtube}><Youtube /></a></li>
-                                    <li className='mx-2 flex'><a  href={`mailto:${socials?.email}`}><AtSign /></a></li>
-                                        <li className='mx-2 flex'><a  href={socials?.tiktok}><i className="fa-brands fa-tiktok text-xl"></i></a></li>
+                                    <li className='mx-0 flex '><a href={import.meta.env.VITE_SOCIAL_FACEBOOK}><Facebook /></a></li>
+
+                                    <li className='mx-2 flex'><a href={import.meta.env.VITE_SOCIAL_INSTAGRAM}><Instagram /></a></li>
+
+                                    <li className='mx-2 flex'><a href={import.meta.env.VITE_SOCIAL_YOUTUBE}><Youtube /></a></li>
+
+                                    <li className='mx-2 flex'><a  href={`mailto:${import.meta.env.VITE_SOCIAL_EMAIL}`}><AtSign /></a></li>
+
+                                    <li className='mx-2 flex'><a  href={import.meta.env.VITE_SOCIAL_TIKTOK}><i className="fa-brands fa-tiktok text-xl"></i></a></li>
                                     </ul>
                              </div>
                              <hr />
                              <div className='mb-2'>
                                 <h3 className='font-semibold mx-2 my-3'>PHONE</h3>
-                                <p className='flex'><span><Phone /></span> <span className='mx-1'>{socials?.number}</span></p>
+                                <p className='flex'><span><Phone /></span> <span className='mx-1'>{import.meta.env.VITE_SOCIAL_NUMBER}</span></p>
                              </div>
                              <hr />
                              <div className='mb-2'>
                                 <h3 className='font-semibold mx-2 my-3'>E-mail</h3>
-                                <p className='flex'><span><AtSign /></span> <span className='mx-1'>{socials?.number}</span></p>
+                                <p className='flex'><span><AtSign /></span> <span className='mx-1'>{import.meta.env.VITE_SOCIAL_EMAIL}</span></p>
                              </div>
                              
                         </div>

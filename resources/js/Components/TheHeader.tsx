@@ -5,16 +5,16 @@ import { Button } from '@/Components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu"
 import Navbar  from './Navbar';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from 'axios';
-import useBaseUrl from '@/hooks/useBaseUrl';
+
+
+
 
   
 interface PropsSocial{
@@ -32,6 +32,7 @@ interface Cours{
 }
 interface PropsSocialType{
     socials:PropsSocial,
+    memoizedCourse: Cours[],
 }
 
 interface Pros{
@@ -40,23 +41,18 @@ interface Pros{
     slug: string;
 }
 
-const TheHeader:React.FC<PropsSocialType> = ({socials}) => {
+interface FetchDataResult {
+    data: Cours[];
+    error: string | null;
+}
 
-    const [isOpen,setIsOpen]=useState<boolean>(false)
+
+
+
+const TheHeader:React.FC<PropsSocialType> = ({socials,memoizedCourse}) => {
+
    
-  const [datas, setDatas] = useState<Pros[] | null>([]);
-  
-  const baseUrl=useBaseUrl();
- 
-  useEffect(()=>{
-    axios.get(baseUrl)
-    .then(function (response) {  
-      setDatas(response.data.coures);
-    })
-    .catch(function (error) {
-      console.log(error);
-    })
-  },[]);
+    const [isOpen,setIsOpen]=useState<boolean>(false);
     const {url,props}=usePage<any>();
     
     return (
@@ -87,7 +83,7 @@ const TheHeader:React.FC<PropsSocialType> = ({socials}) => {
                     className="w-25 h-12  hidden dark:block"
                 />
               </div>
-              <Navbar />
+              <Navbar memoizedCourse={memoizedCourse} />
             </nav>
             <div className='flex w-full justify-between dark:bg-white md:hidden bg-gray-900'>
                     <Button onClick={()=>setIsOpen(!isOpen)} className='z-50 cursor-pointer duration-100  '>
@@ -113,7 +109,7 @@ const TheHeader:React.FC<PropsSocialType> = ({socials}) => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-56">
                             <DropdownMenuRadioGroup value={props?.cours?.slug}>
-                                {datas && datas.map((cour,index)=>(
+                                {memoizedCourse && memoizedCourse.map((cour,index)=>(
                                     <DropdownMenuRadioItem key={index} value={cour.slug== props?.cours?.slug ?cour.slug:''}>
                                         <Link className='uppercase'  href={`/cours/${cour.slug}`}>{cour.title}</Link>
                                     </DropdownMenuRadioItem>
